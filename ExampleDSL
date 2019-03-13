@@ -1,0 +1,21 @@
+Global
+     pagenumbering: progessbar/text/number/...
+     tableofcontents: true
+     text-color: green
+     background-color: blue
+     ....
+Template
+    name: TemplateOne
+    textbox: height, width, position
+    image: height, width, position
+Slide
+     type: Imageslide
+     imageurl: http://sfdksdf.dk/image.png
+     text: lalala
+     transition: fade
+     ....
+Slide
+     type: TemplateOne
+     text: lalalala
+     transition: slide-in
+     ....
