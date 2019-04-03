@@ -1,0 +1,26 @@
+Name ::= IDENTIFIER
+
+Program::= Template* Slide* Global? ProgressAnimation*
+
+Template::= 'Template' Name '(' Templatebody ')'
+TemplateBody::= ('progress:' {ProgressAnimation})? 'tabular:' TabularBody
+
+TabularBody::= ('line:' ('left:' boxtype)? (right:' boxtype)?  boxtype?
+Boxtype::= textbox | imagebox
+
+ProgressAnimation::= 'ProgressAnimation' Name '(' AnimationBody ')'
+AnimationBody::= 'Type:' Type ('image:' Name)? 'Animate:' Animation
+Animation::= (AnimateProperty ':' Value '->' Value)+
+AnimateProperty::= width | height | position | color
+
+Global::= 'Global' '(' GlobalBody ')'
+GlobalBody::= (GlobalProperties Color)*
+GlobalProperties::= text-color | background-color
+
+Slide::= 'Slide' '(' SlideBody ')'
+SlideBody::= ('template: ' {Template})? ('title:' Name)?
+
+Value::= 'Color|INT Unit
+Unit::= 'px' | '%' | 'pt' 
+Color::= HEX
+Type::= Bar | Image
