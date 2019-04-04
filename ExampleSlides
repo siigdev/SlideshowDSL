@@ -1,0 +1,179 @@
+\documentclass{beamer}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\definecolor{pbblue}{HTML}{0A75A8}% color for the progress bar and the circle
+\definecolor{pbgray}{HTML}{575757}% background color for the progress bar
+
+\makeatletter
+\def\progressbar@progressbara{} % the progress bar
+\def\progressbar@progressbarb{} % the second progress bar
+\newcount\progressbar@tmpcounta% auxiliary counter
+\newcount\progressbar@tmpcountb% auxiliary counter
+\newdimen\progressbar@pbht %progressbar height
+\newdimen\progressbar@pbwd %progressbar width
+\newdimen\progressbar@rimage % radius for the image
+\newdimen\progressbar@tmpdim % auxiliary dimension
+
+\progressbar@pbwd=1\linewidth
+\progressbar@rimage=10px
+
+% the progress bar
+\def\progressbar@progressbara{%
+    \pgfmathparse{int(round(\insertframenumber-1))}
+    \progressbar@tmpcounta= \pgfmathresult$
+    
+    \pgfmathparse{int(round(\inserttotalframenumber-1))}
+    \progressbar@tmpcountb=\pgfmathresult$
+    
+    \progressbar@pbht=1.5px
+    \progressbar@tmpdim=.5\progressbar@pbwd
+    \multiply\progressbar@tmpdim by \progressbar@tmpcounta
+    \divide\progressbar@tmpdim by \progressbar@tmpcountb
+    \progressbar@tmpdim=2\progressbar@tmpdim
+
+  \begin{tikzpicture}[overlay, remember picture,shift={($(current page.south west)+(1,1)$)}]
+    \draw[pbblue!30,line width=\progressbar@pbht]
+      (0,0) -- ++ (\progressbar@pbwd,0pt);
+
+    \node[inner sep=0pt] at (\the\dimexpr\progressbar@tmpdim-\progressbar@rimage, .\progressbar@pbht)
+    {\includegraphics[width=\progressbar@rimage]{apple.jpg}};
+
+
+
+  \end{tikzpicture}%
+}
+
+\def\progressbar@progressbarb{%
+
+    \pgfmathparse{int(round(\insertframenumber-1))}
+    \progressbar@tmpcounta= \pgfmathresult$
+    
+    \pgfmathparse{int(round(\inserttotalframenumber-1))}
+    \progressbar@tmpcountb=\pgfmathresult$
+    
+    \progressbar@pbht=8px
+
+    \progressbar@tmpdim=\progressbar@pbwd
+    \multiply\progressbar@tmpdim by \progressbar@tmpcounta
+    \divide\progressbar@tmpdim by \progressbar@tmpcountb
+
+  \begin{tikzpicture}[overlay, remember picture,shift={($(current page.south west)+(1,1)$)}, rounded corners=2pt,very thin]
+
+    \shade[top color=pbgray!20,bottom color=pbgray!20,middle color=pbgray!50]
+      (0pt, 0pt) rectangle ++ (\progressbar@pbwd, \progressbar@pbht);
+
+      \shade[draw=pbblue,top color=pbblue!50,bottom color=pbblue!50,middle color=pbblue] %
+        (0pt, 0pt) rectangle ++ (\progressbar@tmpdim, \progressbar@pbht);
+
+    \draw[color=normal text.fg!50]  
+      (0pt, 0pt) rectangle (\progressbar@pbwd, \progressbar@pbht) 
+        node[pos=0.5,color=normal text.fg] {\textnormal{%
+             \insertframenumber/\inserttotalframenumber%
+        }%
+    };
+  \end{tikzpicture}%
+}
+
+
+\setbeamertemplate{progressa}
+{%
+
+  \begin{beamercolorbox}[wd=\paperwidth,ht=4ex,center,dp=1ex]{white}%
+    \progressbar@progressbara%
+  \end{beamercolorbox}%
+}
+
+\setbeamertemplate{progressb}
+{%
+
+  \begin{beamercolorbox}[wd=\paperwidth,ht=4ex,center,dp=1ex]{white}%
+    \progressbar@progressbarb%
+  \end{beamercolorbox}%
+}
+\newcommand{\progressa}{\usebeamertemplate{progressa}{}} 
+\newcommand{\progressb}{\usebeamertemplate{progressb}{}}
+\makeatother
+
+
+
+\title{Slideshow DSL}
+\author{Sebastian Siig Nørgaard, Jonas Phillip Nielsen, Aleksander Ryborg Christensen}
+\institute{Model-driven Software Development Project}
+\date{Apr 5, 2019}
+ 
+ 
+ 
+\begin{document}
+ 
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Introduction}
+\textbf{Domain:} Slideshow (with Progress animations)\\
+\textbf{Generates:} LaTeX Beamer code\\
+~\\
+\textbf{What can be expressed:}\\
+~\\
+Slide templates
+\begin{itemize}
+\item Defining imageboxes/textboxes
+\item Defining positions of boxes
+\end{itemize}
+Progress Animation Templates
+\begin{itemize}
+\item Define type
+\item Define animation
+\begin{itemize}
+\item  Width, height, position, color etc.
+\end{itemize}
+\end{itemize}
+
+\usebeamertemplate{progressa}
+\end{frame}
+
+\begin{frame}
+\frametitle{Introduction}
+Global Settings\\
+\begin{itemize}
+\item Text color
+\item Background color
+\end{itemize}
+
+Individual Slides\\
+\begin{itemize}
+\item Add title
+\item Use template
+\item Individual settings
+\end{itemize}
+Left out for now: \\
+\begin{itemize}
+\item Margin, padding, border, font style, size etc.
+\end{itemize}
+
+\usebeamertemplate{progressa}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{DSL Example}
+\includegraphics[width=0.5\textwidth]{dsl.png}
+\usebeamertemplate{progressb}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Metamodel}
+la
+\usebeamertemplate{progressb}
+\end{frame}
+
+\begin{frame}
+\frametitle{Example}
+da
+\usebeamertemplate{progressb}
+\end{frame}
+
+
+\end{document}
