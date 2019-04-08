@@ -1,0 +1,82 @@
+grammar org.xtext.example.mydsl1.MyDsl with org.eclipse.xtext.common.Terminals
+
+generate myDsl "http://www.xtext.org/example/mydsl1/MyDsl"
+
+Model:
+	template+=Template?
+	slides+=Slide* 
+	progressanimation+=ProgressAnimation* 
+	global+=Global?
+;
+
+Global:
+	'Global:' name=ID OPEN CLOSE
+;
+
+Slide:	
+	'Slide:' name=ID body=SlideBody 
+;
+
+SlideBody:
+	OPEN 
+		("template:" template=[Template]) ("title:" Name)?
+	CLOSE
+;
+
+Template:
+	'Template:' name=ID body=TemplateBody 
+;
+
+TemplateBody:
+	OPEN 
+		'progress:' animation=[ProgressAnimation]
+	CLOSE
+;
+ProgressAnimation:
+	'ProgressAnimation:' name=ID 
+		OPEN 
+			body=AnimationBody 
+		CLOSE
+;
+
+AnimationBody:
+	'type:' Type 'animate:' animation=Animation
+;
+
+Animation:
+	AnimateProperty ':' from=Value ('->' to=Value Unit)?
+;
+
+AnimateProperty:
+	"width" | "height" | "position" | "color"
+;
+Type:
+	{rectangle} | {image}
+;
+Boxtype:
+	{textbox} | {imagebox}
+;
+Value:
+	Color | {Value} INT
+;
+Name: 
+	STRING
+;
+Color:
+	{HEX}
+;
+Unit:
+	"px" | "%" | "pt"
+;
+
+
+
+
+
+terminal OPEN:
+	'('
+;
+
+terminal CLOSE:
+	')'
+;
