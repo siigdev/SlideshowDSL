@@ -1,77 +1,116 @@
-grammar org.xtext.example.mydsl1.MyDsl with org.eclipse.xtext.common.Terminals
+grammar org.xtext.example.mydsl.Anislide with org.eclipse.xtext.common.Terminals
+generate anislide "http://www.xtext.org/example/mydsl/Anislide"
 
-generate myDsl "http://www.xtext.org/example/mydsl1/MyDsl"
+//  #################################
+//  ## GLOBAL MODEL
+//  #################################
 
 Model:
-	template+=Template?
-	slides+=Slide* 
-	progressanimation+=ProgressAnimation* 
+	progressanimation+=ProgressAnimation* &
+	template+=Template* &
+	slides+=Slide* &
 	global+=Global?
 ;
 
+//  #################################
+//  ## GLOBAL
+//  #################################
 Global:
-	'Global:' name=ID OPEN CLOSE
+	"Global" globalbody=GlobalBody	
 ;
 
-Slide:	
-	'Slide:' name=ID body=SlideBody 
-;
-
-SlideBody:
-	OPEN 
-		("template:" template=[Template]) ("title:" Name)?
+GlobalBody:
+	OPEN
+		{GlobalBody} styles+=Style*
 	CLOSE
 ;
+
+//  #################################
+//  ## PROGRESS ANIMATION
+//  #################################
+
+ProgressAnimation:
+	"Progress" name=ID progressbody=ProgressBody
+;
+
+ProgressBody:
+	OPEN
+		{ProgressBody} progressentities+=ProgressEntity*
+	CLOSE
+;
+
+ProgressEntity: 
+		{progresstype} key="type:" value=AniType |
+		{animate} key="animate:" value+=Options* ("->" tovalue=INT Unit)? 
+;
+
+//  #################################
+//  ## SLIDE
+//  #################################
+
+Slide:
+	"Slide" slidebody=SlideBody
+;
+SlideBody:
+	OPEN
+		{SlideBody} slideentities+=SlideEntity* styles+=Style*
+	CLOSE
+;
+
+SlideEntity:
+	{title} key='title:' value=STRING |
+	{tmplt} key='template:' value=[Template]
+;
+
+//  #################################
+//  ## TEMPLATE
+//  #################################
 
 Template:
-	'Template:' name=ID body=TemplateBody 
+	"Template" name=ID templatebody=TemplateBody
 ;
 
-TemplateBody:
+TemplateBody: 
 	OPEN 
-		'progress:' animation=[ProgressAnimation]
+		{TemplateBody} templateentities+=TemplateEntity* styles+=Style*
 	CLOSE
 ;
-ProgressAnimation:
-	'ProgressAnimation:' name=ID 
-		OPEN 
-			body=AnimationBody 
-		CLOSE
+
+TemplateEntity: (
+		{progressanim} key="progress:" value=[ProgressAnimation] |
+		{tabular} key="line:" OPEN 'left:' left=BoxType 'right:' right=BoxType CLOSE
+	)
 ;
 
-AnimationBody:
-	'type:' Type 'animate:' animation=Animation
+//  #################################
+//  ## GLOBAL
+//  #################################
+
+Options: 
+	{height} key='height:' value=INT unit=Unit |
+	{width} key='width:' value=INT unit=Unit |
+	{position} key='position:' value=INT unit=Unit
+;
+Unit: 
+	('px' | '%')
 ;
 
-Animation:
-	AnimateProperty ':' from=Value ('->' to=Value Unit)?
+Style:
+	{textcolor} key="color:" value=STRING |
+	{backgroundcolor} key="background-color:" value=STRING |
+	{fontsize} key="font-size:" value=INT 
 ;
 
-AnimateProperty:
-	"width" | "height" | "position" | "color"
+AniType:
+	"image" | "rectangle"
 ;
-Type:
-	{rectangle} | {image}
-;
-Boxtype:
-	{textbox} | {imagebox}
-;
-Value:
-	Color | {Value} INT
-;
-Name: 
-	STRING
-;
-Color:
-	{HEX}
-;
-Unit:
-	"px" | "%" | "pt"
+BoxType:
+	'imagebox' | 'textbox'
 ;
 
-
-
-
+//  #################################
+//  ## TERMINALS
+//  #################################
 
 terminal OPEN:
 	'('
@@ -80,3 +119,6 @@ terminal OPEN:
 terminal CLOSE:
 	')'
 ;
+terminal HEX:
+	('0x'|'0X')('0'..'9'|'a'..'f'|'A'..'F')+
+; 
