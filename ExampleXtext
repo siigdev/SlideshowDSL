@@ -40,8 +40,8 @@ ProgressBody:
 ;
 
 ProgressEntity: 
-		{progresstype} key="type:" value=AniType |
-		{animate} key="animate:" value+=Options* ("->" tovalue=INT Unit)? 
+		{Progresstype} key="type:" value=AniType |
+		{Animate} key="animate:" value+=Options* ("->" tovalue=INT Unit)? 
 ;
 
 //  #################################
@@ -58,8 +58,8 @@ SlideBody:
 ;
 
 SlideEntity:
-	{title} key='title:' value=STRING |
-	{tmplt} key='template:' value=[Template]
+	{Title} key='title:' value=STRING |
+	{Tmplt} key='template:' value=[Template]
 ;
 
 //  #################################
@@ -77,8 +77,8 @@ TemplateBody:
 ;
 
 TemplateEntity: (
-		{progressanim} key="progress:" value=[ProgressAnimation] |
-		{tabular} key="line:" OPEN 'left:' left=BoxType 'right:' right=BoxType CLOSE
+		{Progressanim} key="progress:" value=[ProgressAnimation] |
+		{Tabular} key="line:" OPEN 'left:' left=BoxType ('right:' right=BoxType)? CLOSE
 	)
 ;
 
@@ -87,18 +87,18 @@ TemplateEntity: (
 //  #################################
 
 Options: 
-	{height} key='height:' value=INT unit=Unit |
-	{width} key='width:' value=INT unit=Unit |
-	{position} key='position:' value=INT unit=Unit
+	{Height} key='height:' value=INT unit=Unit |
+	{Width} key='width:' value=INT unit=Unit |
+	{Position} key='position:' value=INT unit=Unit
 ;
 Unit: 
 	('px' | '%')
 ;
 
 Style:
-	{textcolor} key="color:" value=STRING |
-	{backgroundcolor} key="background-color:" value=STRING |
-	{fontsize} key="font-size:" value=INT 
+	{Textcolor} key="color:" value=STRING |
+	{BackgroundColor} key="background-color:" value=STRING |
+	{Fontsize} key="font-size:" value=INT 
 ;
 
 AniType:
@@ -121,4 +121,4 @@ terminal CLOSE:
 ;
 terminal HEX:
 	('0x'|'0X')('0'..'9'|'a'..'f'|'A'..'F')+
-; 
+;
