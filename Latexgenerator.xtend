@@ -48,7 +48,7 @@ class Latexgenerator extends AnislideGenerator  {
 	
 	def generateProgress(ProgressAnimation progressani) {
 		'''
-		progressani
+		% progressani
 		'''
 	}
 	def generateGlobal(Global global) {
