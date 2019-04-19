@@ -6,8 +6,8 @@ generate anislide "http://www.xtext.org/example/mydsl/Anislide"
 //  #################################
 
 Model:
-	progressanimation+=ProgressAnimation* &
-	template+=Template* &
+	progressanimations+=ProgressAnimation* &
+	templates+=Template* &
 	slides+=Slide* &
 	global+=Global?
 ;
@@ -59,7 +59,7 @@ SlideBody:
 
 SlideEntity:
 	{Title} key='title:' value=STRING |
-	{Tmplt} key='template:' value=[Template]
+	{Tmplt} key='template:' value=[Template] 
 ;
 
 //  #################################
@@ -121,4 +121,4 @@ terminal CLOSE:
 ;
 terminal HEX:
 	('0x'|'0X')('0'..'9'|'a'..'f'|'A'..'F')+
-;
+; 
