@@ -35,5 +35,14 @@ class AnislideValidator extends AbstractAnislideValidator {
 				}
 			}
 		}
+	@Check
+		def checkTitleExists(Slide slide) {
+			for (entity : slide.slidebody.slideentities) {
+				if (entity.key !== "title") {
+					warning("You need to provide a title", AnislidePackage.Literals.SLIDE__SLIDEBODY, MISSING_ENTITY)	
+				}
+
+			}
+		}
 	
 }
