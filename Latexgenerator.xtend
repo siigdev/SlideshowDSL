@@ -12,7 +12,8 @@ import org.xtext.example.mydsl.anislide.Tmplt
 import org.xtext.example.mydsl.anislide.ProgressAnimation
 import org.xtext.example.mydsl.anislide.Textcolor
 import org.xtext.example.mydsl.anislide.BackgroundColor
-class Latexgenerator extends AnislideGenerator  {
+
+class LatexGenerator extends AnislideGenerator  {
 	new(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		initialise(resource, fsa, context);
 		fsa.generateFile(title + ".tex", generateDocument());
@@ -53,15 +54,25 @@ class Latexgenerator extends AnislideGenerator  {
 	}
 	def generateGlobal(Global global) {
 		'''
+		% #########################
+		% #  GLOBAL STYLE         #
+		% #########################
 		«FOR style : global.globalbody.styles»
-				«style.generate»
+				«style.generateGlobalEntity»
 		«ENDFOR»
+		
+		\BeforeBeginEnvironment{frame}{%
+	    	«FOR style : global.globalbody.styles»
+  				«style.generateGlobalEntityTemplate»
+      		«ENDFOR»
+		}
+		
+		% #########################
 		
 		'''
 	}
 	def generateTemplate(Template template) {
 		'''
-		
 		'''
 	}
 	def generateSlide(Slide slide) {		
@@ -96,8 +107,30 @@ class Latexgenerator extends AnislideGenerator  {
 	}
 	def dispatch generate(BackgroundColor entity) {
 		''' 
-		\definecolor{TempBG}{RGB}{«entity.value»}
+		\definecolor{TempBG}{«entity.value»}
 		\setbeamercolor{background canvas}{bg=TempBG}
 		''' 
+	}
+	def dispatch generateGlobalEntity(BackgroundColor entity) {
+		''' 
+		\defbeamertemplate*{background canvas}{global}
+		    {%		    
+		      \definecolor{bgcolor}{rgb}{«entity.value»}\ifbeamercolorempty[bg]{background canvas}{}{\color{bgcolor}\vrule width\paperwidth height\paperheight}
+		    }
+		''' 
+	}
+	def dispatch generateGlobalEntity(Textcolor entity) {
+		'''
+		'''
+	}
+	def dispatch generateGlobalEntityTemplate(BackgroundColor entity) {
+		'''
+		\setbeamertemplate{background canvas}[global]%
+		'''
+	}
+	def dispatch generateGlobalEntityTemplate(Textcolor entity) {
+		'''
+		'''
+		
 	}
 }
