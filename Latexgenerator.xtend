@@ -63,16 +63,29 @@ class LatexGenerator extends AnislideGenerator  {
 		
 		\BeforeBeginEnvironment{frame}{%
 	    	«FOR style : global.globalbody.styles»
-  				«style.generateGlobalEntityTemplate»
+  				«style.generateGlobalStyle»
       		«ENDFOR»
 		}
-		
 		% #########################
 		
 		'''
 	}
 	def generateTemplate(Template template) {
 		'''
+		% #########################
+		% #  TEMPLATE STYLE       #
+		% #########################
+		«FOR style : template.templatebody.styles»
+				«style.generateTemplateEntity»
+		«ENDFOR»
+		
+		    \makeatletter
+		    \define@key{beamerframe}{«template.name»}[true]{%
+	    	«FOR style : template.templatebody.styles»
+  				«style.generateTemplateStyle»
+      		«ENDFOR»
+		}
+		% #########################
 		'''
 	}
 	def generateSlide(Slide slide) {		
@@ -85,6 +98,7 @@ class LatexGenerator extends AnislideGenerator  {
 		«FOR entity : slide.slidebody.slideentities»
 			«entity.generate»
 		«ENDFOR»
+		Write your text here :)
 		\end{frame}
 		}
 		'''
@@ -115,22 +129,46 @@ class LatexGenerator extends AnislideGenerator  {
 		''' 
 		\defbeamertemplate*{background canvas}{global}
 		    {%		    
-		      \definecolor{bgcolor}{rgb}{«entity.value»}\ifbeamercolorempty[bg]{background canvas}{}{\color{bgcolor}\vrule width\paperwidth height\paperheight}
-		    }
+		      \definecolor{bgcolor}{rgb}{«entity.value»}\color{bgcolor}\vrule width\paperwidth height\paperheight
+		}
 		''' 
 	}
 	def dispatch generateGlobalEntity(Textcolor entity) {
 		'''
+		\definecolor{textcolor}{rgb}{«entity.value»}
 		'''
 	}
-	def dispatch generateGlobalEntityTemplate(BackgroundColor entity) {
+	def dispatch generateTemplateEntity(BackgroundColor entity) {
 		'''
-		\setbeamertemplate{background canvas}[global]%
+		\defbeamertemplate*{background canvas}{bg}
+		    {%		    
+		      \definecolor{bgcolor}{rgb}{«entity.value»}\color{bgcolor}\vrule width\paperwidth height\paperheight
+		}      
 		'''
 	}
-	def dispatch generateGlobalEntityTemplate(Textcolor entity) {
+	def dispatch generateTemplateEntity(Textcolor entity) {
 		'''
+		\definecolor{textcolor}{rgb}{«entity.value»}
 		'''
-		
+	}
+	def dispatch generateGlobalStyle(BackgroundColor entity) {
+		'''
+		\setbeamertemplate{background canvas}[global]
+		'''
+	}
+	def dispatch generateGlobalStyle(Textcolor entity) {
+		'''
+		\color{textcolor}
+		'''	
+	}
+		def dispatch generateTemplateStyle(BackgroundColor entity) {
+		'''
+		\setbeamertemplate{background canvas}[bg]
+		'''
+	}
+	def dispatch generateTemplateStyle(Textcolor entity) {
+		'''
+		\color{textcolor}
+		'''	
 	}
 }
