@@ -73,7 +73,7 @@ class LatexGenerator extends AnislideGenerator  {
 	def generateTemplate(Template template) {
 		'''
 		% #########################
-		% #  TEMPLATE STYLE       #
+		% #  TEMPLATE «template.name.toUpperCase» #
 		% #########################
 		«FOR style : template.templatebody.styles»
 				«style.generateTemplateEntity»
@@ -96,6 +96,7 @@ class LatexGenerator extends AnislideGenerator  {
 		«ENDFOR»
 		\begin{frame}
 		«FOR entity : slide.slidebody.slideentities»
+			
 			«entity.generate»
 		«ENDFOR»
 		Write your text here :)
@@ -170,5 +171,8 @@ class LatexGenerator extends AnislideGenerator  {
 		'''
 		\color{textcolor}
 		'''	
+	}
+	def generateTemplateName(Tmplt templatename) {
+		'''	[test] '''
 	}
 }
