@@ -38,27 +38,10 @@
 			this.fsa = fsa
 			this.context = context
 			model = resource.allContents.filter(ModelImpl).next;
-			iterate()
 			title = resource.URI.lastSegment()
 			title = title.substring(0, title.length-4)
+			System.out.println("Something worked!);
 		}
-	
-		def iterate() {
-			if (model.templates.length != 0) {
-				for(template : model.templates){
-					println("elel");
-				}
-				
-			}
-			if (model.slides.length != 0) {
-				println(model.slides)
-			}
-			if (model.global.length == 1) {
-				println(model.global)
-			}
-			if (model.progressanimations.length != 0) {
-				println(model.progressanimations)
-			}
-			
+
 		}
 	}
