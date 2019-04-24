@@ -1,21 +1,26 @@
-Global
-     pagenumbering: progessbar/text/number/...
-     tableofcontents: true
-     text-color: green
-     background-color: blue
-     ....
-Template
-    name: TemplateOne
-    textbox: height, width, position
-    image: height, width, position
-Slide
-     type: Imageslide
-     imageurl: http://sfdksdf.dk/image.png
-     text: lalala
-     transition: fade
-     ....
-Slide
-     type: TemplateOne
-     text: lalalala
-     transition: slide-in
-     ....
+Template Templatename (
+   progress: animationname
+   background-color: "100, 0, 100"
+)
+Progress animationname (
+   type: image
+   animate:
+       width: 10px 
+       height: 10px
+       position: 0% -> 100%
+)
+Global (
+   color: "0, 100, 0"
+   background-color: "0, 0, 100"
+)
+Slide (
+   title: "title of the hmm"
+   template: Templatename
+)
+Slide (
+   title: "title twooo"
+)
+Slide (
+   title: "title threeee"
+   template: Templatename
+)
