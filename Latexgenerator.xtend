@@ -94,12 +94,13 @@ class LatexGenerator extends AnislideGenerator  {
 		«FOR style : slide.slidebody.styles»
 				«style.generate»
 		«ENDFOR»
-		\begin{frame}
+		\begin{frame}«FOR entity : slide.slidebody.slideentities»«IF entity.key == "template:"»«entity.generate»«ENDIF»«ENDFOR»
 		«FOR entity : slide.slidebody.slideentities»
-			
-			«entity.generate»
+			«IF entity.key != "template:"»
+				«entity.generate»
+			«ENDIF»
 		«ENDFOR»
-		Write your text here :)
+		Write your text hereeee :)
 		\end{frame}
 		}
 		'''
@@ -110,9 +111,7 @@ class LatexGenerator extends AnislideGenerator  {
 		'''
 	}
 	def dispatch generate(Tmplt entity) {
-		''' 
-		\usebeamertemplate{«entity.value.name»}
-		'''
+		'''[«entity.value.name»]'''
 	}
 	def dispatch generate(Textcolor entity) {
 		''' 
@@ -162,7 +161,7 @@ class LatexGenerator extends AnislideGenerator  {
 		\color{textcolor}
 		'''	
 	}
-		def dispatch generateTemplateStyle(BackgroundColor entity) {
+	def dispatch generateTemplateStyle(BackgroundColor entity) {
 		'''
 		\setbeamertemplate{background canvas}[bg]
 		'''
